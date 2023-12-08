@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Date Difference Calculator</title>
+        <link rel="stylesheet" href="style.css">
+        <!-- Include moment.js library for date and time manipulation-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    </head>
+    <body>
+
+        <div class="container">
+            <h1>Date Difference Calculator</h1>
+            <!-- Form to display dated and time  difference-->
+            <form id="dateForm">
+                <label for="startDate">Start Date and Time:</label>
+                <input type="datetime-local" id="startDate" value="">
+                
+                <label for="endDate">End Date and Time:</label>
+                <input type="datetime-local" id="endDate" value="">
+            </form>
+
+            <h2>Time Difference:</h2>
+            <p id="value"></p>
+
+            <!-- textColor display card-->
+            <h2>Color Settings:</h2>
+            <label for="textColor">Text Color:</label>
+            <input type="color" id="textColor" value="#000000">
+
+            <!-- bgColor display card-->
+            <label for="bgColor">Background Color:</label>
+            <input type="color" id="bgColor" value="#ffffff">
+
+            <h2>Change Traces:</h2>
+            <p>Last Date Change: <span id="lastDateChange">Not yet changed</span></p>
+            <p>Last Color Change: <span id="lastColorChange">Not yet changed</span></p>
+        </div>
+
+        <script>
+            function calculateDateDifference() {
+                const startDate = moment(document.getElementById('startDate').value);
+                const endDate = moment(document.getElementById('endDate').value);
+
+                // Checking if the date and time us valid 
+                if (startDate.isValid() && endDate.isValid()) {
+                    const diffInSeconds = endDate.diff(startDate, 'seconds');
+                    const diffInMinutes = endDate.diff(startDate, 'minutes');
+                    const diffInHours = endDate.diff(startDate, 'hours');
+                    const diffInDays = endDate.diff(startDate, 'days');
+                    const diffInMonths = endDate.diff(startDate, 'months');
+                    const diffInYears = endDate.diff(startDate, 'years');
+
+                    const value = `Difference: ${diffInSeconds} seconds, ${diffInMinutes} minutes, ${diffInHours} hours, ${diffInDays} days, ${diffInMonths} months, ${diffInYears} years.`;
+                    document.getElementById('value').innerText = value;
+
+                    // Update last date change trace
+                    const lastDateChangeElement = document.getElementById('lastDateChange');
+                    lastDateChangeElement.innerText = moment().format("MMMM Do YYYY, h:mm:ss a");
+                } else {
+                    document.getElementById('value').innerText = 'Please enter valid dates.';
+                }
+            }
+
+            document.getElementById('startDate').addEventListener('input', calculateDateDifference);
+            document.getElementById('endDate').addEventListener('input', calculateDateDifference);
+
+            const textColorPicker = document.getElementById('textColor');
+            const bgColorPicker = document.getElementById('bgColor');
+
+            textColorPicker.addEventListener('input', updateColors);
+            bgColorPicker.addEventListener('input', updateColors);
+
+            function updateColors() {
+                const textColor = textColorPicker.value;
+                const bgColor = bgColorPicker.value;
+                
+                // Check if the textcolor and bgcolor are not the same
+                if (textColor !== bgColor) {
+                    document.body.style.color = textColor;
+                    document.body.style.backgroundColor = bgColor;
+
+                    // Update last color change trace
+                    const lastColorChangeElement = document.getElementById('lastColorChange');
+                    lastColorChangeElement.innerText = moment().format("MMMM Do YYYY, h:mm:ss a");
+                } else {
+                    alert("Please choose different colors for text and background.");
+                }
+            }
+        </script>
+
+    </body>
+</html>
